@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload Profile</title>
+  </head>
+  <body>
+    <h1>Upload Profile</h1>
+    <form enctype="multipart/form-data" id="formUpload">
+      <label for="file">Upload Image:</label>
+      <input type="file" id="file" name="file" accept="image/*" /><br />
+      <button type="submit">Submit</button>
+    </form>
+    <script>
+      document
+        .getElementById("formUpload")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const formData = new FormData(this);
+          try {
+            fetch("http://localhost:5000/api/users/upload-profile", {
+              method: "POST",
+              headers: {
+                authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiSmNueHAwT3lWMiIsImlhdCI6MTcwMDEyODI5NCwiZXhwIjoxNzAwMjE0Njk0fQ.vz8QR3Zr2jdacMK5z_hCk1HNShflvPn6nugxgolgtMI`,
+              },
+              body: formData,
+            });
+          } catch (error) {
+            console.log(error);
+          }
+        });
+    </script>
+  </body>
+</html>

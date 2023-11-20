@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Organization Form</title>
+  </head>
+  <body>
+    <h1>Organization Form</h1>
+    <form id="formRegisterCompany" enctype="multipart/form-data">
+      <label for="organizationName">Organization Name:</label>
+      <input
+        type="text"
+        id="organizationName"
+        name="organizationName"
+        value="UXON"
+        required
+      /><br />
+
+      <label for="industry">Industry:</label>
+      <input
+        type="text"
+        id="industry"
+        name="industry"
+        value="Information Technology"
+        required
+      /><br />
+
+      <label for="street">Street:</label>
+      <input
+        type="text"
+        id="street"
+        name="street"
+        value="7 cross street"
+        required
+      /><br />
+
+      <label for="city">City:</label>
+      <input type="text" id="city" name="city" value="chennai" required /><br />
+
+      <label for="zipcode">Zip Code:</label>
+      <input
+        type="text"
+        id="zipcode"
+        name="zipcode"
+        value="632602"
+        required
+      /><br />
+
+      <label for="website">Website:</label>
+      <input
+        type="url"
+        id="website"
+        name="website"
+        value="http://www.uxon.com"
+        required
+      /><br />
+
+      <label for="employeeSize">Employee Size:</label>
+      <select id="employeeSize" name="employeeSize" required>
+        <option value="small">Small</option>
+        <option value="medium">Medium</option>
+        <option value="large" selected>Large</option></select
+      ><br />
+
+      <label for="foundDate">Founding Date:</label>
+      <input
+        type="date"
+        id="foundDate"
+        name="foundDate"
+        value="2003-08-08"
+        required
+      /><br />
+
+      <label for="description">Description:</label><br />
+      <textarea id="description" name="description" rows="4" cols="50">
+This is the software company that produces the enthusiastic application from innovative ideas to society.</textarea
+      ><br />
+
+      <label for="file">Upload Image:</label>
+      <input type="file" id="file" name="file" accept="image/*" /><br />
+
+      <button type="submit">Submit</button>
+    </form>
+    <script>
+      document
+        .getElementById("formRegisterCompany")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const formData = new FormData(this);
+          await fetch("http://localhost:5000/api/organization/register", {
+            method: "POST",
+            headers: {
+              authorization:
+                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiN1RHSHpfZlFmQiIsImlhdCI6MTcwMDQ3Mzk0MCwiZXhwIjoxNzAwNTYwMzQwfQ.C2mocX0QOJLUeSKVXC0hkv8BmKsQwQvu8Nqzeb7x_Ak",
+            },
+            body: formData,
+          });
+        });
+    </script>
+  </body>
+</html>

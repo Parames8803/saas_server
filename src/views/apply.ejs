@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Application Form</title>
+  </head>
+  <body>
+    <h1>Application Form</h1>
+    <form enctype="multipart/form-data" id="formApply">
+      <label for="jobId">jobId:</label>
+      <input
+        type="text"
+        id="jobId"
+        name="jobId"
+        value="b3f39280-33ed-415d-8d80-075889c68e2a"
+        required
+      /><br />
+
+      <label for="fullName">fullName:</label>
+      <input
+        type="text"
+        id="fullName"
+        name="fullName"
+        value="Aravindh"
+        required
+      /><br />
+
+      <label for="phone">Phone:</label>
+      <input
+        type="text"
+        id="phone"
+        name="phone"
+        value="8992374682"
+        required
+      /><br />
+
+      <label for="email">email:</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        value="aravindh@gmail.com"
+        required
+      /><br />
+
+      <label for="address">address:</label>
+      <input
+        type="text"
+        id="address"
+        name="address"
+        value="gandhi nagar, Chennai"
+        required
+      /><br />
+
+      <label for="linkedin">linkedin:</label>
+      <input
+        type="text"
+        id="linkedin"
+        name="linkedin"
+        value="http://linkedin.com"
+        required
+      /><br />
+
+      <label for="github">github:</label>
+      <input
+        type="text"
+        id="github"
+        name="github"
+        value="https://github.com"
+        required
+      /><br />
+
+      <label for="objective">objective:</label>
+      <input
+        type="text"
+        id="objective"
+        name="objective"
+        value="No  more Objection"
+        required
+      /><br />
+
+      <label for="experience">experience:</label>
+      <input
+        type="text"
+        id="experience"
+        name="experience"
+        value="Some Experience are there"
+        required
+      /><br />
+
+      <label for="skills">skills:</label>
+      <input
+        type="text"
+        id="skills"
+        name="skills"
+        value="['React','Nodejs','MongoDB']"
+        required
+      /><br />
+
+      <label for="file">Upload Resume:</label>
+      <input type="file" id="resume" name="resume" /><br />
+
+      <label for="file">Upload Profile:</label>
+      <input type="file" id="profile" name="profile" /><br />
+
+      <button type="submit">Submit</button>
+      <script>
+        document
+          .getElementById("formApply")
+          .addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            try {
+              await fetch("http://localhost:5000/application", {
+                method: "POST",
+                body: formData,
+              })
+                .then((response) => console.log(response))
+                .catch((err) => console.log(err));
+            } catch (error) {
+              console.log(error);
+            }
+          });
+      </script>
+    </form>
+  </body>
+</html>
