@@ -14,7 +14,6 @@
         id="organizationName"
         name="organizationName"
         value="UXON"
-        required
       /><br />
 
       <label for="industry">Industry:</label>
@@ -88,11 +87,11 @@ This is the software company that produces the enthusiastic application from inn
         .addEventListener("submit", async function (e) {
           e.preventDefault();
           const formData = new FormData(this);
-          await fetch("http://localhost:5000/api/organization/register", {
+          await fetch("http://localhost:5000/api/org/register", {
             method: "POST",
             headers: {
               authorization:
-                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiN1RHSHpfZlFmQiIsImlhdCI6MTcwMDQ3Mzk0MCwiZXhwIjoxNzAwNTYwMzQwfQ.C2mocX0QOJLUeSKVXC0hkv8BmKsQwQvu8Nqzeb7x_Ak",
+                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibFJpRVprRVpWbSIsImlhdCI6MTcwMDU2Mzc0NywiZXhwIjoxNzAwNjUwMTQ3fQ.Sry--B6TNsvM5NnhPtx_Z1PFQ-Di7TTC7N4lq5F0CpQ",
             },
             body: formData,
           });

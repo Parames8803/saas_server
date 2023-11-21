@@ -4,14 +4,17 @@ const StoreApiLog = require("../StoreApiLog");
 const GetJobById = async (req, res) => {
   try {
     const jobId = req.params.id;
-    const findJob = await Job.findOne({ j_id: jobId });
-    res
-      .status(200)
-      .json({ message: "Job Fetched Successfully", data: findJob });
-    StoreApiLog(req, res);
+    if (jobId) {
+      const findJob = await Job.findOne({ j_id: jobId });
+      res
+        .status(200)
+        .json({ message: "Job Fetched Successfully", data: findJob });
+      StoreApiLog(req, res);
+    } else {
+      console.log({ message: "JobId missing in params" });
+    }
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(400).json({ message: "Error in Fetching Job" });
     StoreApiLog(req, res);
   }
 };

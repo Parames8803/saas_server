@@ -27,7 +27,7 @@ const getStorage = (customPath) => {
       },
     });
   } catch (error) {
-    console.log(error);
+    console.log({ message: "Error in getStorage" });
   }
 };
 
@@ -37,7 +37,7 @@ const uploadFileToPath = (customPath) => {
     const upload = multer({ storage: storage });
     return upload.single("file");
   } catch (error) {
-    console.log(error);
+    console.log({ message: "Error in file Upload" });
   }
 };
 
@@ -47,7 +47,7 @@ const uploadFilesToPath = (customPath, fieldNames) => {
     const upload = multer({ storage: storage }).fields(fieldNames);
     return upload;
   } catch (error) {
-    console.log(error);
+    console.log({ message: "Error in file Upload" });
   }
 };
 

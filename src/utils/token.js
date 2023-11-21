@@ -1,47 +1,63 @@
 const jwt = require("jsonwebtoken");
-const StoreApiLog = require('../controllers/StoreApiLog')
+const StoreApiLog = require("../controllers/StoreApiLog");
 require("dotenv").config();
 
 // Function to generate an access token
 const generateAccessToken = (payload) => {
   try {
-    const secretKey = process.env.ACCESS_SECRET_KEY;
-    const expiresIn = "1d";
-    return jwt.sign(payload, secretKey, { expiresIn });
+    if (payload) {
+      const secretKey = process.env.ACCESS_SECRET_KEY;
+      const expiresIn = "1d";
+      return jwt.sign(payload, secretKey, { expiresIn });
+    } else {
+      console.log({ message: "Payload doesn't exists in generateAccessToken" });
+    }
   } catch (error) {
-    console.log(error);
+    console.log({ message: "Error in generateAccessToken" });
   }
 };
 
 // Function to generate a refresh token
 const generateRefreshToken = (payload) => {
   try {
-    const secretKey = process.env.REFRESH_SECRET_KEY;
-    const expiresIn = "7d"; // Longer expiration for refresh token
-    return jwt.sign(payload, secretKey, { expiresIn });
+    if (payload) {
+      const secretKey = process.env.REFRESH_SECRET_KEY;
+      const expiresIn = "7d"; // Longer expiration for refresh token
+      return jwt.sign(payload, secretKey, { expiresIn });
+    } else {
+      console.log({
+        message: "Payload doesn't exists in generateRefreshToken",
+      });
+    }
   } catch (error) {
-    console.log(error);
+    console.log({ message: "Error in generateRefreshToken" });
   }
 };
 
 // Function to verify a JWT token
-const verifyToken = async(token, secretKey, req,  res, next) => {
+const verifyToken = async (token, secretKey, req, res, next) => {
   try {
-    jwt.verify(token, secretKey, (err, user) => {
-      if (err) {
-        if (err.name === "TokenExpiredError") {
-          res.status(401).json({ message: "Unauthorized - Token has expired" });
-          StoreApiLog(req, res);
+    if (token && secretKey) {
+      jwt.verify(token, secretKey, (err, user) => {
+        if (err) {
+          if (err.name === "TokenExpiredError") {
+            res
+              .status(401)
+              .json({ message: "Unauthorized - Token has expired" });
+            StoreApiLog(req, res);
+          } else {
+            res.status(403).json({ message: "Forbidden" });
+            StoreApiLog(req, res);
+          }
         } else {
-          res.status(403).json({ message: "Forbidden" });
-          StoreApiLog(req, res);
+          next(user);
         }
-      }else{
-        next(user);
-      }
-    });
+      });
+    } else {
+      console.log({ message: "token and Secret missing in verifyToken" });
+    }
   } catch (error) {
-    console.log(error);
+    console.log({ message: "Error in verifyToken" });
   }
 };
 
@@ -58,29 +74,30 @@ const refreshAccessToken = (req, res) => {
       res.status(200).send({ accessToken: newAccessToken });
       StoreApiLog(req, res);
     } catch (error) {
-      throw new Error("Invalid refresh token");
+      res.status(400).json({ message: "Invalid refresh token" });
+      StoreApiLog(req, res);
     }
   } catch (error) {
-    console.log(error);
+    console.log({ message: "Error in refreshAccessToken" });
   }
 };
 
 // Function to authenticate a token and send required Status
-const authenticateToken = async(req, res, next) => {
+const authenticateToken = async (req, res, next) => {
   try {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
     const secretKey = process.env.ACCESS_SECRET_KEY;
     if (!token) {
       res.status(401).json({ message: "Unauthorized - No token provided" });
-      StoreApiLog(req, res)
+      StoreApiLog(req, res);
     }
     await verifyToken(token, secretKey, req, res, (user) => {
       req.user = user;
       next();
     });
   } catch (error) {
-    console.log(error);
+    console.log({ message: "Error in authenticateToken" });
   }
 };
 

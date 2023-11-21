@@ -4,14 +4,17 @@ const StoreApiLog = require("../StoreApiLog");
 const DeleteJob = async (req, res) => {
   try {
     const jobId = req.params.id;
-    const findJob = await Job.findOne({ j_id: jobId });
-    findJob.j_status = 0;
-    await findJob.save();
-    res.status(200).json({ message: "Job Deleted Successfully..." });
-    StoreApiLog(req, res);
+    if (jobId) {
+      const findJob = await Job.findOne({ j_id: jobId });
+      findJob.j_status = 0;
+      await findJob.save();
+      res.status(200).json({ message: "Job Deleted Successfully..." });
+      StoreApiLog(req, res);
+    } else {
+      console.log({ message: "jobId doesn't exists in DeleteJob.." });
+    }
   } catch (error) {
-    console.log(error);
-    res.status(200).json({ message: "Internal Server Error" });
+    res.status(400).json({ message: "Error in Deleting Job" });
     StoreApiLog(req, res);
   }
 };

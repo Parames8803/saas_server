@@ -9,11 +9,12 @@ const authSchema = new mongoose.Schema({
   u_user_password: { type: String, required: true },
   u_profile: { type: String },
   u_otp: { type: String },
-  u_otp_expiresAt : { type: String },
+  u_otp_expiresAt: { type: String },
   u_role: { type: String },
-  u_post_token : { type : String },
-  u_token_expires : { type : String },
-  u_member_token : { type : String }
+  u_post_token: { type: String },
+  u_token_expires: { type: String },
+  u_member_token: { type: String },
+  u_status: { type: Number },
 });
 
 // Set the Collection Name for above Schema
