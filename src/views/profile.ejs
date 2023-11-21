@@ -19,10 +19,10 @@
           e.preventDefault();
           const formData = new FormData(this);
           try {
-            fetch("http://localhost:5000/api/users/upload-profile", {
+            fetch("http://localhost:5000/api/user/upload-profile", {
               method: "POST",
               headers: {
-                authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiSmNueHAwT3lWMiIsImlhdCI6MTcwMDEyODI5NCwiZXhwIjoxNzAwMjE0Njk0fQ.vz8QR3Zr2jdacMK5z_hCk1HNShflvPn6nugxgolgtMI`,
+                authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiajN3bDVFeW9nVCIsImlhdCI6MTcwMDU0MzE0NiwiZXhwIjoxNzAwNjI5NTQ2fQ.jFZJq6Jqu88d_myMx6uBLxWJQ_yO48sXqqiE99lZv_I`,
               },
               body: formData,
             });

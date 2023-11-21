@@ -8,7 +8,7 @@ const GetJobById = require("../controllers/job/GetJobById")
 const { uploadFileToPath } = require("../middleware/fileHandle");
 const OrgRegister = require("../controllers/org/OrgRegister");
 const UploadProfile = require("../controllers/user/UploadProfile");
-const { uploadFileToPath } = require("../middleware/fileHandle");
+// const { uploadFileToPath } = require("../middleware/fileHandle");
 const router = express.Router();
 
 // Define route configurations
@@ -25,7 +25,7 @@ const routeConfigurations = [
     handler: OrgRegister,
   },
   {
-    path: "/user/upload-rofile",
+    path: "/user/upload-profile",
     method: "post",
     middleware: uploadFileToPath("profile"),
     handler: UploadProfile,

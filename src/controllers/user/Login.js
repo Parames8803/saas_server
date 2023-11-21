@@ -12,6 +12,8 @@ const Login = async (req, res) => {
   try {
     // Get the details from user
     const { userCredentials, password } = req.body;
+
+    console.log(userCredentials, password);
     // check username or email is exists
     // if exists then check password
     const findUser = await Auth.findOne({
@@ -20,9 +22,10 @@ const Login = async (req, res) => {
         { u_user_email: userCredentials },
       ],
     });
+    console.log(findUser);
     if (!findUser) {
       res.status(401).json({ error: "Invalid username or email" }); 
-      StoreApiLog(req, res)
+      // StoreApiLog(req, res)
     }
     // Compare user entered Pass and DB hashed Pass
     const passMatch = await comparePassword(password, findUser.u_user_password);
@@ -47,7 +50,7 @@ const Login = async (req, res) => {
       StoreApiLog(req, res)
     }
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(400).json({ message: "Internal Server Error" });
     StoreApiLog(req, res)
     console.log(error);
   }

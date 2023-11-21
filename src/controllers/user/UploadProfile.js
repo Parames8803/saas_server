@@ -3,6 +3,7 @@ const StoreApiLog = require("../StoreApiLog");
 
 const UploadProfile = async (req, res) => {
   try {
+    console.log(req.file);
     const filePath = req.file.path;
     const userId = req.user.user_id;
     const findUser = await Auth.findOne({ u_id: userId });
