@@ -13,7 +13,7 @@ const verifyEmail = async (email, otp) => {
   try {
     const mailOptions = {
       from: process.env.USER_EMAIL,
-      to: "prem@mailinator.com", // "prem@mailinator.com"
+      to: "santhosh@mailinator.com", // "prem@mailinator.com"
       subject: "Your One-Time Password (OTP) for Verify Email",
       text: `Dear User,
         We have received a request to Verifying your Email. Please use the following One-Time Password (OTP) to proceed with the Verification process:    

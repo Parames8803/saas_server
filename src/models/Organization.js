@@ -6,13 +6,12 @@ const organizationSchema = new mongoose.Schema({
   o_name: { type: String, required: true },
   o_industry_type: { type: String, required: true },
   o_website_link: { type: String, required: true },
+  o_social_link: { type: String, required: true },
   o_employee_size: { type: String, required: true },
+  o_phone: { type: Number, required: true },
+  o_email: { type: String, required: true },
   o_description: { type: String, required: true },
-  o_address: {
-    street: String,
-    city: String,
-    zipCode: String,
-  },
+  o_address: { type: String, required: true },
   o_found_date: { type: Date, required: true },
   o_logo_path: { type: String, required: true },
 });

@@ -15,7 +15,7 @@ const Register = async (req, res) => {
         $or: [{ u_user_name: username }, { u_user_email: email }],
       });
       if (findUser) {
-        res.status(400).json({ message: "Credentials already Exists" });
+        res.status(400).json({ message: "Username or password already Exists" });
         StoreApiLog(req, res);
       } else {
         // Hashing the password and Store it in DB

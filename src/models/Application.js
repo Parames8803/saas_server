@@ -9,10 +9,7 @@ const applicationSchema = new mongoose.Schema({
   a_u_phone : { type : String },
   a_u_address: { type: String },
   a_u_linkedin: { type: String },
-  a_u_github: { type: String },
-  a_u_objective: { type: String, required: true },
-  a_u_experience: { type: String, required: true },
-  a_u_skills: { type: String, required: true },
+  a_u_gender: { type: String, required: true },
   a_u_resume: { type: String },
   a_u_profile: { type: String },
   a_created_on: { type: Date, default: Date.now }

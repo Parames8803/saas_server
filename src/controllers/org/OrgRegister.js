@@ -12,16 +12,19 @@ const OrgRegister = async (req, res) => {
     if (userId) {
       const {
         organizationName,
-        industry,
-        street,
-        city,
-        zipcode,
-        website,
+        type,
+        address,
+        websiteLink,
+        email,
+        number,
         employeeSize,
         foundDate,
         description,
+        socialLink
       } = req.body;
+      console.log(organizationName);
       const filePath = req.file.path;
+      console.log(filePath)
       // Finding Org. Id using User Id
       const findOrgId = await Auth.findOne({ u_id: userId });
       // Embed the Auth ( u_o_id ) as Org. Id
@@ -29,17 +32,16 @@ const OrgRegister = async (req, res) => {
       const newOrganization = new Organization({
         o_id: companyId,
         o_name: organizationName,
-        o_industry_type: industry,
-        o_website_link: website,
+        o_industry_type: type,
+        o_website_link: websiteLink,
+        o_social_link: socialLink,
         o_employee_size: employeeSize,
         o_description: description,
-        o_address: {
-          street: street,
-          city: city,
-          zipcode: zipcode,
-        },
+        o_address: address,
         o_found_date: foundDate,
         o_logo_path: filePath,
+        o_phone: number,
+        o_email : email
       });
       // Save the changes and send the success Status.
       await newOrganization.save();
@@ -50,6 +52,7 @@ const OrgRegister = async (req, res) => {
       console.log({ message: "userId missing in token" });
     }
   } catch (error) {
+    console.log(error);
     res.status(400).json({ message: "Error in Registering Organization" });
     StoreApiLog(req, res);
   }

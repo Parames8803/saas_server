@@ -8,6 +8,7 @@ const GetJob = async (req, res) => {
     const findUser = await Auth.findOne({ u_id: userId });
     if (findUser && userId) {
       const orgId = findUser.u_o_id;
+      // console.log(orgId)
       const findJobs = await Job.find({ j_o_id: orgId });
       res
         .status(200)

@@ -13,11 +13,9 @@ const ApplyJob = async (req, res) => {
       phone,
       address,
       linkedin,
-      github,
-      objective,
-      experience,
-      skills,
+      gender
     } = req.body;
+    console.log(req.body)
     const resumePath = req.files.resume[0].path;
     const profilePath = req.files.profile[0].path;
     if (resumePath && profilePath) {
@@ -29,10 +27,7 @@ const ApplyJob = async (req, res) => {
         a_u_phone: phone,
         a_u_address: address,
         a_u_linkedin: linkedin,
-        a_u_github: github,
-        a_u_objective: objective,
-        a_u_experience: experience,
-        a_u_skills: skills,
+        a_u_gender : gender,
         a_u_resume: resumePath,
         a_u_profile: profilePath,
         a_created_on: Date.now(),

@@ -10,7 +10,8 @@ const CreateJob = async (req, res) => {
   try {
     const {
       title,
-      locationType,
+      location,
+      jobType,
       experience,
       description,
       skills, // [ 'one', 'two', 'three' ]
@@ -34,12 +35,13 @@ const CreateJob = async (req, res) => {
         j_com_name: orgName,
         j_com_logo: orgLogo,
         j_com_address: orgAddress,
-        j_location_type: locationType,
+        j_location_type: location,
+        j_job_type : jobType,
         j_experience: experience,
         j_description: description,
         j_skills: skills,
         j_posting_date: new Date(),
-        j_apply_link: `http://localhost:3000/ats/${j_id}`,
+        j_apply_link: `http://localhost:5173/ats/${j_id}`,
         j_created_on: Date.now(),
         j_status: 1,
       });

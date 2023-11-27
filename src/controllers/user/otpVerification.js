@@ -7,9 +7,11 @@ const StoreApiLog = require("../StoreApiLog");
 
 const otpVerification = async (req, res) => {
   try {
+    console.log('received');
     const { otp, userId } = req.body;
+    console.log(otp);
     if (!otp || !userId) {
-      res.send({ message: "Otp Required" });
+      res.status(400).send({ message: "Otp Required" });
     } else {
       const findUser = await Auth.findOne({ u_id: userId });
       if (findUser) {
@@ -33,8 +35,8 @@ const otpVerification = async (req, res) => {
           });
           res.status(200).json({
             message: "Account Created Successfully",
-            AccessToken: accessToken,
-            RefreshToken: refreshToken,
+            accessToken: accessToken,
+            refreshToken: refreshToken,
           });
           StoreApiLog(req, res);
         }

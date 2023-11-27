@@ -6,6 +6,7 @@ const getStorage = (customPath) => {
   try {
     return multer.diskStorage({
       destination: function (req, file, cb) {
+        // console.log(file);
         if (file.fieldname === "resume") {
           // Set destination dynamically based on customPath parameter
           cb(null, `public/${customPath}/resume`);
@@ -23,16 +24,19 @@ const getStorage = (customPath) => {
           cb(null, "resume" + Date.now() + extension);
         } else {
           cb(null, Date.now() + "-" + file.originalname);
+          // console.log('file name genrated');
         }
       },
     });
   } catch (error) {
     console.log({ message: "Error in getStorage" });
+    return false
   }
 };
 
 const uploadFileToPath = (customPath) => {
   try {
+    // console.log('entry')
     const storage = getStorage(customPath);
     const upload = multer({ storage: storage });
     return upload.single("file");

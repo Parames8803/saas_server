@@ -1,26 +1,20 @@
-// Import dependencies
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const routes = require("./src/routes/routes");
 const connectDB = require("./config/dbConfig");
 const path = require("path");
-// const pdfParser = require("./helpers/pdfParser");
-// const Api = require("./models/Api");
-// const shortId = require("./helpers/shortId");
-// Config for Dotenv variables
-require("dotenv").config();
+const cors = require('cors');
 // Connecting to DB
 connectDB();
-// Set up EJS as the view engine
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "src", "views"));
-// Middleware to access JSON documents
 app.use(express.json());
+app.use(cors());
 // Express Middleware to serve static files
 app.use(express.static(path.join(__dirname, "public")));
 // Express Middleware to handle form data
 app.use(express.urlencoded({ extended: true }));
-// Setting up routes
 app.use("/", routes);
 app.get("/register", (req, res) => {
   res.render("register");

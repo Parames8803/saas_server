@@ -15,8 +15,6 @@ const Login = async (req, res) => {
       res.send({ message: "Please Enter Credentials.." });
     } else {
       // console.log(userCredentials, password);
-      // check username or email is exists
-      // if exists then check password
       const findUser = await Auth.findOne({
         $or: [
           { u_user_name: userCredentials },
@@ -25,7 +23,7 @@ const Login = async (req, res) => {
       });
       // console.log(findUser);
       if (!findUser) {
-        res.status(401).json({ error: "Invalid username or email" });
+        res.status(401).json({ message: "Invalid username or email" });
         StoreApiLog(req, res);
       } else {
         // Compare user entered Pass and DB hashed Pass
@@ -45,12 +43,12 @@ const Login = async (req, res) => {
           });
           res.status(200).json({
             message: "Login successful",
-            AccessToken: accessToken,
-            RefreshToken: refreshToken,
+            accessToken: accessToken,
+            refreshToken: refreshToken,
           });
           StoreApiLog(req, res);
         } else {
-          res.status(401).json({ error: "Invalid password" });
+          res.status(401).json({ message: "Invalid password" });
           StoreApiLog(req, res);
         }
       }
