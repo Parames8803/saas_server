@@ -1,4 +1,4 @@
-const Auth = require("../../models/Auth");
+const { checkUserCredentials } = require("../../services/Auth");
 const { comparePassword } = require("../../utils/hash");
 const {
   generateAccessToken,
@@ -12,19 +12,13 @@ const Login = async (req, res) => {
     // Get the details from user
     const { userCredentials, password } = req.body;
     if (!userCredentials || !password) {
-      res.send({ message: "Please Enter Credentials.." });
+      throw new Error("MissingRequiredValues");
     } else {
       // console.log(userCredentials, password);
-      const findUser = await Auth.findOne({
-        $or: [
-          { u_user_name: userCredentials },
-          { u_user_email: userCredentials },
-        ],
-      });
+      const findUser = await checkUserCredentials(userCredentials);
       // console.log(findUser);
       if (!findUser) {
-        res.status(401).json({ message: "Invalid username or email" });
-        StoreApiLog(req, res);
+        throw new Error("InvalidCredentials");
       } else {
         // Compare user entered Pass and DB hashed Pass
         const passMatch = await comparePassword(
@@ -41,21 +35,27 @@ const Login = async (req, res) => {
             AccessToken: accessToken,
             RefreshToken: refreshToken,
           });
+          res.cookie("accessToken", accessToken, { maxAge: 172800000 });
+          res.cookie("refreshToken", refreshToken, { maxAge: 604800000 });
           res.status(200).json({
             message: "Login successful",
-            accessToken: accessToken,
-            refreshToken: refreshToken,
           });
           StoreApiLog(req, res);
         } else {
-          res.status(401).json({ message: "Invalid password" });
-          StoreApiLog(req, res);
+          throw new Error("InvalidCredentials");
         }
       }
     }
   } catch (error) {
-    res.status(400).json({ message: "Error in Login" });
-    StoreApiLog(req, res);
+    if (error.message === "MissingRequiredValues") {
+      res.status(400).json({ error });
+      StoreApiLog(req, res);
+    } else if (error.message === "InvalidCredentials") {
+      res.status(401).json({ error });
+      StoreApiLog(req, res);
+    } else {
+      res.status(500).json({ error });
+    }
   }
 };
 

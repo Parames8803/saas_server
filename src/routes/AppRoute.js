@@ -1,7 +1,8 @@
 // Import Dependencies
 const express = require("express");
 const { multiFilesHandle } = require("../middleware/fileHandle");
-const ApplyJob = require("../controllers/ats/ApplyJob");
+const Applications = require("../controllers/application/Application");
+const AppByIdCandidate = require("../controllers/application/AppByIdCandidate");
 const router = express.Router();
 
 // Define route configurations
@@ -10,7 +11,12 @@ const routeConfigurations = [
     path: "/",
     method: "post",
     middleware: multiFilesHandle,
-    handler: ApplyJob,
+    handler: Applications,
+  },
+  {
+    path: "/:id",
+    method: "get",
+    handler: AppByIdCandidate,
   },
 ];
 

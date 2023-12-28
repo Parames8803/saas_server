@@ -1,22 +1,15 @@
-const Job = require("../../models/Job");
-const { getOrgByUserId } = require("../../services/Auth");
+const { getApplicationByJob } = require("../../services/Application");
 const { getJobById } = require("../../services/job");
 const StoreApiLog = require("../StoreApiLog");
-const StoreActivity = require("../org/StoreActivity");
 
-const DeleteJob = async (req, res) => {
+const AppByIdOrg = async (req, res) => {
   try {
-    const userId = req.user.user_id;
-    const orgId = await getOrgByUserId(userId);
     const jobId = req.params.id;
     if (jobId) {
-      const findJob = await getJobById(jobId);
-      if (findJob.j_deleted_on == null) {
-        findJob.j_deleted_on = Date.now();
-        await findJob.save();
-        const activity = "Job Deleted";
-        await StoreActivity(userId, orgId, activity);
-        res.status(200).json({ message: "Job Deleted Successfully..." });
+      const applicantDetails = await getApplicationByJob(jobId);
+      const jobDetails = await getJobById(jobId);
+      if (jobDetails.j_status == 1 && jobDetails.j_deleted_on == null) {
+        res.status(200).json({ applicantDetails, jobDetails });
         StoreApiLog(req, res);
       } else {
         throw new Error("DataNotFound");
@@ -38,4 +31,4 @@ const DeleteJob = async (req, res) => {
   }
 };
 
-module.exports = DeleteJob;
+module.exports = AppByIdOrg;

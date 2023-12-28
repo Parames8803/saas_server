@@ -1,15 +1,16 @@
-const { getJobById } = require("../../services/job");
+const { getOrgById } = require("../../services/Org");
+const { getJobById, getOrgByJob } = require("../../services/job");
 const StoreApiLog = require("../StoreApiLog");
 
-const GetJobById = async (req, res) => {
+const AppByIdCandidate = async (req, res) => {
   try {
     const jobId = req.params.id;
     if (jobId) {
-      const findJob = await getJobById(jobId);
-      if (findJob.j_deleted_on == null) {
-        res
-          .status(200)
-          .json({ message: "Job Fetched Successfully", data: findJob });
+      const jobDetails = await getJobById(jobId);
+      if (jobDetails.j_status == 1 && jobDetails.j_deleted_on == null) {
+        const orgId = await getOrgByJob(jobId);
+        const orgDetails = await getOrgById(orgId);
+        res.status(200).json({ jobDetails, orgDetails });
         StoreApiLog(req, res);
       } else {
         throw new Error("DataNotFound");
@@ -31,4 +32,4 @@ const GetJobById = async (req, res) => {
   }
 };
 
-module.exports = GetJobById;
+module.exports = AppByIdCandidate;

@@ -16,41 +16,47 @@
         value="UXON"
       /><br />
 
-      <label for="industry">Industry:</label>
+      <label for="type">Type:</label>
       <input
         type="text"
-        id="industry"
-        name="industry"
+        id="type"
+        name="type"
         value="Information Technology"
         required
       /><br />
 
-      <label for="street">Street:</label>
+      <label for="address">address:</label>
       <input
         type="text"
-        id="street"
-        name="street"
+        id="address"
+        name="address"
         value="7 cross street"
         required
       /><br />
 
-      <label for="city">City:</label>
-      <input type="text" id="city" name="city" value="chennai" required /><br />
-
-      <label for="zipcode">Zip Code:</label>
+      <label for="phone">Phone:</label>
       <input
-        type="text"
-        id="zipcode"
-        name="zipcode"
-        value="632602"
+        type="number"
+        id="number"
+        name="number"
+        value="9952213571"
         required
       /><br />
 
-      <label for="website">Website:</label>
+      <label for="email">Email:</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        value="prem@gmail.com"
+        required
+      /><br />
+
+      <label for="websiteLink">Website:</label>
       <input
         type="url"
-        id="website"
-        name="website"
+        id="websiteLink"
+        name="websiteLink"
         value="http://www.uxon.com"
         required
       /><br />
@@ -70,6 +76,14 @@
         value="2003-08-08"
         required
       /><br />
+      <label for="socialLink">Social Link:</label>
+      <input
+        type="text"
+        id="socialLink"
+        name="socialLink"
+        value="https://linkedin.com"
+        required
+      /><br />
 
       <label for="description">Description:</label><br />
       <textarea id="description" name="description" rows="4" cols="50">
@@ -87,11 +101,11 @@ This is the software company that produces the enthusiastic application from inn
         .addEventListener("submit", async function (e) {
           e.preventDefault();
           const formData = new FormData(this);
-          await fetch("http://localhost:5000/api/org/register", {
+          await fetch("http://localhost:8000/api/org/register", {
             method: "POST",
             headers: {
               authorization:
-                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibFJpRVprRVpWbSIsImlhdCI6MTcwMDU2Mzc0NywiZXhwIjoxNzAwNjUwMTQ3fQ.Sry--B6TNsvM5NnhPtx_Z1PFQ-Di7TTC7N4lq5F0CpQ",
+                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMFhnaEQyeG1SMiIsImlhdCI6MTcwMzIzNzQ5NSwiZXhwIjoxNzAzMzIzODk1fQ.1xURXbzJdsXUWooiRn31Uz-QOSF_oPoFxWzP6tjBpn8",
             },
             body: formData,
           });

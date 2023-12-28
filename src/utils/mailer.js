@@ -13,7 +13,7 @@ const verifyEmail = async (email, otp) => {
   try {
     const mailOptions = {
       from: process.env.USER_EMAIL,
-      to: "santhosh@mailinator.com", // "prem@mailinator.com"
+      to: "prem@mailinator.com", // "santhosh@mailinator.com"
       subject: "Your One-Time Password (OTP) for Verify Email",
       text: `Dear User,
         We have received a request to Verifying your Email. Please use the following One-Time Password (OTP) to proceed with the Verification process:    
@@ -25,12 +25,12 @@ const verifyEmail = async (email, otp) => {
     };
 
     await service.sendMail(mailOptions, (err, res) => {
-      if (err) console.log({ message: "Error in Sending Mail in Mailer" });
+      if (err) throw new Error(err);
     });
 
     return true;
   } catch (error) {
-    console.log({ message: "Error in Mailer" });
+    console.log({ error });
   }
 };
 

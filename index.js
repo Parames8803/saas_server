@@ -4,7 +4,8 @@ const app = express();
 const routes = require("./src/routes/routes");
 const connectDB = require("./config/dbConfig");
 const path = require("path");
-const cors = require('cors');
+const cors = require("cors");
+
 // Connecting to DB
 connectDB();
 app.set("view engine", "ejs");
@@ -28,6 +29,7 @@ app.get("/apply", (req, res) => {
 app.get("/profile", (req, res) => {
   res.render("profile");
 });
+
 // Setting up PORT
 app.listen(process.env.PORT, () => {
   console.log(`kick Starting Server...`);

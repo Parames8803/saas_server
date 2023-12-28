@@ -1,4 +1,4 @@
-const Auth = require("../../models/Auth");
+const { getUserById } = require("../../services/Auth");
 const {
   generateAccessToken,
   generateRefreshToken,
@@ -7,46 +7,38 @@ const StoreApiLog = require("../StoreApiLog");
 
 const otpVerification = async (req, res) => {
   try {
-    console.log('received');
     const { otp, userId } = req.body;
-    console.log(otp);
     if (!otp || !userId) {
-      res.status(400).send({ message: "Otp Required" });
+      throw new Error("MissingRequiredValues");
     } else {
-      const findUser = await Auth.findOne({ u_id: userId });
-      if (findUser) {
-        if (otp !== findUser.u_otp || Date.now() > findUser.u_otp_expiresAt) {
-          res.status(400).json({ message: "Invalid OTP" });
-        } else {
-          findUser.u_otp = null;
-          findUser.u_otp_expiresAt = null;
-          findUser.u_status = 1;
-          await findUser.save();
-          // Set the payload as User id and
-          // generate access and refresh token
-          const payload = { user_id: findUser.u_id };
-          const accessToken = generateAccessToken(payload);
-          const refreshToken = generateRefreshToken(payload);
-          // Send the tokens to the Client
-          console.log({
-            message: "Account Created Successfully",
-            AccessToken: accessToken,
-            RefreshToken: refreshToken,
-          });
-          res.status(200).json({
-            message: "Account Created Successfully",
-            accessToken: accessToken,
-            refreshToken: refreshToken,
-          });
-          StoreApiLog(req, res);
-        }
+      const findUser = await getUserById(userId);
+      if (otp !== findUser.u_otp || Date.now() > findUser.u_otp_expiresAt) {
+        throw new Error("MissingRequiredValues");
       } else {
-        console.log({ message: "User id doesn't Match..." });
+        findUser.u_otp = null;
+        findUser.u_otp_expiresAt = null;
+        findUser.u_status = 1;
+        await findUser.save();
+        const payload = { user_id: findUser.u_id };
+        const accessToken = generateAccessToken(payload);
+        const refreshToken = generateRefreshToken(payload);
+        // Send the tokens to the Client
+        res.cookie("accessToken", accessToken, { maxAge: 172800000 });
+        res.cookie("refreshToken", refreshToken, { maxAge: 604800000 });
+        res.status(200).json({
+          message: "Account Created Successfully",
+        });
+        StoreApiLog(req, res);
       }
     }
   } catch (error) {
-    res.status(400).json({ message: "Error in Verifying Otp" });
-    StoreApiLog(req, res);
+    if (error.message === "MissingRequiredValues") {
+      res.status(400).json({ error });
+      StoreApiLog(req, res);
+    } else {
+      res.status(500).json({ error });
+      StoreApiLog(req, res);
+    }
   }
 };
 

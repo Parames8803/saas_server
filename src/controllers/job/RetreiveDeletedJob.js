@@ -1,22 +1,21 @@
-const Job = require("../../models/Job");
 const { getOrgByUserId } = require("../../services/Auth");
 const { getJobById } = require("../../services/job");
-const StoreApiLog = require("../StoreApiLog");
 const StoreActivity = require("../org/StoreActivity");
+const StoreApiLog = require("../StoreApiLog");
 
-const DeleteJob = async (req, res) => {
+const RetreiveDeletedJob = async (req, res) => {
   try {
     const userId = req.user.user_id;
     const orgId = await getOrgByUserId(userId);
     const jobId = req.params.id;
     if (jobId) {
-      const findJob = await getJobById(jobId);
-      if (findJob.j_deleted_on == null) {
-        findJob.j_deleted_on = Date.now();
-        await findJob.save();
-        const activity = "Job Deleted";
+      const job = await getJobById(jobId);
+      if (job.j_deleted_on !== null) {
+        job.j_deleted_on == null;
+        await job.save();
+        const activity = "Revoked Deleted Job";
         await StoreActivity(userId, orgId, activity);
-        res.status(200).json({ message: "Job Deleted Successfully..." });
+        res.status(200).json({ message: "Job Revoked.." });
         StoreApiLog(req, res);
       } else {
         throw new Error("DataNotFound");
@@ -38,4 +37,4 @@ const DeleteJob = async (req, res) => {
   }
 };
 
-module.exports = DeleteJob;
+module.exports = RetreiveDeletedJob;

@@ -13,7 +13,7 @@
         type="text"
         id="jobId"
         name="jobId"
-        value="b3f39280-33ed-415d-8d80-075889c68e2a"
+        value="2ab809e1-d40d-4527-b904-5e2179671f7e"
         required
       /><br />
 
@@ -22,7 +22,7 @@
         type="text"
         id="fullName"
         name="fullName"
-        value="Aravindh"
+        value="prem"
         required
       /><br />
 
@@ -31,7 +31,7 @@
         type="text"
         id="phone"
         name="phone"
-        value="8992374682"
+        value="9952213571"
         required
       /><br />
 
@@ -40,7 +40,7 @@
         type="email"
         id="email"
         name="email"
-        value="aravindh@gmail.com"
+        value="prem@gmail.com"
         required
       /><br />
 
@@ -62,39 +62,12 @@
         required
       /><br />
 
-      <label for="github">github:</label>
+      <label for="gender">gender:</label>
       <input
         type="text"
-        id="github"
-        name="github"
-        value="https://github.com"
-        required
-      /><br />
-
-      <label for="objective">objective:</label>
-      <input
-        type="text"
-        id="objective"
-        name="objective"
-        value="No  more Objection"
-        required
-      /><br />
-
-      <label for="experience">experience:</label>
-      <input
-        type="text"
-        id="experience"
-        name="experience"
-        value="Some Experience are there"
-        required
-      /><br />
-
-      <label for="skills">skills:</label>
-      <input
-        type="text"
-        id="skills"
-        name="skills"
-        value="['React','Nodejs','MongoDB']"
+        id="gender"
+        name="gender"
+        value="male"
         required
       /><br />
 
@@ -112,7 +85,7 @@
             e.preventDefault();
             const formData = new FormData(this);
             try {
-              await fetch("http://localhost:5000/application", {
+              await fetch("http://localhost:8000/application", {
                 method: "POST",
                 body: formData,
               })

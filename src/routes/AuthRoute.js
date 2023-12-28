@@ -6,7 +6,6 @@ const Login = require("../controllers/user/Login");
 const Register = require("../controllers/user/UserRegister");
 const router = express.Router();
 
-
 // Define route configurations
 const routeConfigurations = [
   { path: "/refresh-token", method: "get", handler: refreshAccessToken },
@@ -14,7 +13,6 @@ const routeConfigurations = [
   { path: "/register", method: "post", handler: Register },
   { path: "/verify-email", method: "post", handler: otpVerification },
 ];
-
 
 // Function to attach routes with middleware
 function attachRoutes(routeConfigurations, router) {

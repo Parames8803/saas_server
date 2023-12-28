@@ -10,10 +10,10 @@ const generateAccessToken = (payload) => {
       const expiresIn = "1d";
       return jwt.sign(payload, secretKey, { expiresIn });
     } else {
-      console.log({ message: "Payload doesn't exists in generateAccessToken" });
+      throw new Error("MissingRequiredValues");
     }
   } catch (error) {
-    console.log({ message: "Error in generateAccessToken" });
+    console.log({ error });
   }
 };
 
@@ -25,12 +25,10 @@ const generateRefreshToken = (payload) => {
       const expiresIn = "7d"; // Longer expiration for refresh token
       return jwt.sign(payload, secretKey, { expiresIn });
     } else {
-      console.log({
-        message: "Payload doesn't exists in generateRefreshToken",
-      });
+      throw new Error("MissingRequiredValues");
     }
   } catch (error) {
-    console.log({ message: "Error in generateRefreshToken" });
+    console.log({ error });
   }
 };
 
@@ -54,10 +52,16 @@ const verifyToken = async (token, secretKey, req, res, next) => {
         }
       });
     } else {
-      console.log({ message: "token and Secret missing in verifyToken" });
+      throw new Error("MissingRequiredValues");
     }
   } catch (error) {
-    console.log({ message: "Error in verifyToken" });
+    if (error.message === "MissingRequiredValues") {
+      res.status(400).json({ error });
+      StoreApiLog(req, res);
+    } else {
+      res.status(500).json({ error });
+      StoreApiLog(req, res);
+    }
   }
 };
 
@@ -67,18 +71,23 @@ const refreshAccessToken = (req, res) => {
     const authHeader = req.headers["authorization"];
     const refreshToken = authHeader && authHeader.split(" ")[1];
     const refreshSecretKey = process.env.REFRESH_SECRET_KEY;
-    try {
-      const decoded = jwt.verify(refreshToken, refreshSecretKey);
-      // Issue a new access token
+    const decoded = jwt.verify(refreshToken, refreshSecretKey);
+    if (decoded) {
       const newAccessToken = generateAccessToken({ user_id: decoded.user_id });
-      res.status(200).send({ accessToken: newAccessToken });
+      res.cookie("accessToken", newAccessToken, { maxAge: 172800000 });
+      res.status(200).send({ message: "Access Token Refreshed" });
       StoreApiLog(req, res);
-    } catch (error) {
-      res.status(400).json({ message: "Invalid refresh token" });
-      StoreApiLog(req, res);
+    } else {
+      throw new Error("DataNotFound");
     }
   } catch (error) {
-    console.log({ message: "Error in refreshAccessToken" });
+    if (error.message === "DataNotFound") {
+      res.status(404).json({ error });
+      StoreApiLog(req, res);
+    } else {
+      res.status(500).json({ error });
+      StoreApiLog(req, res);
+    }
   }
 };
 
@@ -89,15 +98,21 @@ const authenticateToken = async (req, res, next) => {
     const token = authHeader && authHeader.split(" ")[1];
     const secretKey = process.env.ACCESS_SECRET_KEY;
     if (!token) {
-      res.status(401).json({ message: "Unauthorized - No token provided" });
+      throw new Error("InvalidCredentials");
+    } else {
+      await verifyToken(token, secretKey, req, res, (user) => {
+        req.user = user;
+        next();
+      });
+    }
+  } catch (error) {
+    if (error.message === "InvalidCredentials") {
+      res.status(401).json({ error });
+      StoreApiLog(req, res);
+    } else {
+      res.status(500).json({ error });
       StoreApiLog(req, res);
     }
-    await verifyToken(token, secretKey, req, res, (user) => {
-      req.user = user;
-      next();
-    });
-  } catch (error) {
-    console.log({ message: "Error in authenticateToken" });
   }
 };
 

@@ -19,7 +19,7 @@
           e.preventDefault();
           const formData = new FormData(this);
           try {
-            fetch("http://localhost:5000/api/user/upload-profile", {
+            fetch("http://localhost:8000/api/user/upload-profile", {
               method: "POST",
               headers: {
                 authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiajN3bDVFeW9nVCIsImlhdCI6MTcwMDU0MzE0NiwiZXhwIjoxNzAwNjI5NTQ2fQ.jFZJq6Jqu88d_myMx6uBLxWJQ_yO48sXqqiE99lZv_I`,

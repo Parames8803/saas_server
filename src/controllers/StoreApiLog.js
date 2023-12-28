@@ -1,10 +1,9 @@
 const shortId = require("../utils/shortId");
 const Api = require("../models/Api");
 
-const StoreApiLog = async(req, res) => {
+const StoreApiLog = async (req, res) => {
   try {
-    // Capture relevant information
-    const newApi = new Api({
+    await Api.create({
       api_id: shortId(),
       api_method: req.method,
       api_route: req.path,
@@ -12,9 +11,8 @@ const StoreApiLog = async(req, res) => {
       api_message: res.statusMessage,
       timestamp: Date.now(),
     });
-    await newApi.save();
   } catch (error) {
-    console.log(error);
+    console.log({ error });
   }
 };
 

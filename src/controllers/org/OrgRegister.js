@@ -1,7 +1,10 @@
 // Import Models for perform Operations
 const Organization = require("../../models/Organization");
-const Auth = require("../../models/Auth");
 const StoreApiLog = require("../StoreApiLog");
+const { getOrgByUserId } = require("../../services/Auth");
+const pathConvert = require("../../utils/pathConverter");
+const { getOrgByName } = require("../../services/Org");
+const deleteFiles = require("../../utils/deleteFiles");
 
 // Register function that creates the organization with
 // neccessary Details.
@@ -9,7 +12,8 @@ const OrgRegister = async (req, res) => {
   try {
     // Get User id from user in Request.
     const userId = req.user.user_id;
-    if (userId) {
+    const filePath = pathConvert(req.file.path);
+    if (filePath) {
       const {
         organizationName,
         type,
@@ -20,41 +24,45 @@ const OrgRegister = async (req, res) => {
         employeeSize,
         foundDate,
         description,
-        socialLink
+        socialLink,
       } = req.body;
-      console.log(organizationName);
-      const filePath = req.file.path;
-      console.log(filePath)
-      // Finding Org. Id using User Id
-      const findOrgId = await Auth.findOne({ u_id: userId });
-      // Embed the Auth ( u_o_id ) as Org. Id
-      const companyId = findOrgId.u_o_id;
-      const newOrganization = new Organization({
-        o_id: companyId,
-        o_name: organizationName,
-        o_industry_type: type,
-        o_website_link: websiteLink,
-        o_social_link: socialLink,
-        o_employee_size: employeeSize,
-        o_description: description,
-        o_address: address,
-        o_found_date: foundDate,
-        o_logo_path: filePath,
-        o_phone: number,
-        o_email : email
-      });
-      // Save the changes and send the success Status.
-      await newOrganization.save();
-      res.status(200).json({ message: "Organization Created Successfully..." });
-      console.log({ message: "Organization Created Successfully..." });
-      StoreApiLog(req, res);
+      const org = await getOrgByName(organizationName);
+      if (org) {
+        const orgId = await getOrgByUserId(userId);
+        await Organization.create({
+          o_id: orgId,
+          o_name: organizationName,
+          o_industry_type: type,
+          o_website_link: websiteLink,
+          o_social_link: socialLink,
+          o_employee_size: employeeSize,
+          o_description: description,
+          o_address: address,
+          o_found_date: foundDate,
+          o_logo_path: filePath,
+          o_phone: number,
+          o_email: email,
+        });
+        res
+          .status(200)
+          .json({ message: "Organization Created Successfully..." });
+        console.log({ message: "Organization Created Successfully..." });
+        StoreApiLog(req, res);
+      } else {
+        await deleteFiles([filePath]);
+        throw new Error("DataAlreadyExists");
+      }
     } else {
-      console.log({ message: "userId missing in token" });
+      throw new Error("FileUploadError");
     }
   } catch (error) {
-    console.log(error);
-    res.status(400).json({ message: "Error in Registering Organization" });
-    StoreApiLog(req, res);
+    if (error.message === "DataAlreadyExists") {
+      res.status(409).json({ error });
+      StoreApiLog(req, res);
+    } else {
+      res.status(500).json({ error });
+      StoreApiLog(req, res);
+    }
   }
 };
 
