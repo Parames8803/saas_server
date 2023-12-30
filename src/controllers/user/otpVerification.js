@@ -23,10 +23,11 @@ const otpVerification = async (req, res) => {
         const accessToken = generateAccessToken(payload);
         const refreshToken = generateRefreshToken(payload);
         // Send the tokens to the Client
-        res.cookie("accessToken", accessToken, { maxAge: 172800000 });
-        res.cookie("refreshToken", refreshToken, { maxAge: 604800000 });
+        // res.cookie("accessToken", accessToken, { maxAge: 172800000 });
+        // res.cookie("refreshToken", refreshToken, { maxAge: 604800000 });
         res.status(200).json({
           message: "Account Created Successfully",
+          data : { accessToken, refreshToken }
         });
         StoreApiLog(req, res);
       }

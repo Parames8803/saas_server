@@ -30,15 +30,11 @@ const Login = async (req, res) => {
           const payload = { user_id: findUser.u_id };
           const accessToken = generateAccessToken(payload);
           const refreshToken = generateRefreshToken(payload);
-          console.log({
-            message: "Login successful",
-            AccessToken: accessToken,
-            RefreshToken: refreshToken,
-          });
-          res.cookie("accessToken", accessToken, { maxAge: 172800000 });
-          res.cookie("refreshToken", refreshToken, { maxAge: 604800000 });
+          // res.cookie("accessToken", accessToken, { maxAge: 172800000 });
+          // res.cookie("refreshToken", refreshToken, { maxAge: 604800000 });
           res.status(200).json({
             message: "Login successful",
+            data: { accessToken, refreshToken }
           });
           StoreApiLog(req, res);
         } else {

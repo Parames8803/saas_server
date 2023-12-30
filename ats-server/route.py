@@ -11,7 +11,7 @@ def hello():
     jobSkills = json_data.get('job','')
     if(resume == "") or (jobSkills == ""):
         json_message = {
-            "message" : "Values Required..."
+            "Message" : "Values Required..."
         }
         return (jsonify(json_message) , 400)
     else:
